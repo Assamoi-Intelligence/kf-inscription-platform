@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import "tailwindcss";
+@plugin "tailwindcss-primeui";
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 10px; /* Adjust the scrollbar width */
+}
+::-webkit-scrollbar-track {
+  background: #f3f4f6; /* Track color */
+}
+::-webkit-scrollbar-thumb {
+  background-color: #6b7280; /* Thumb color */
+  border-radius: 10px; /* Rounded thumb */
+}
+
+* {
+  scrollbar-width:thin; /* Thin scrollbar */
+  scrollbar-color: #6b7280 #f3f4f6; /* Thumb and track color */
+}

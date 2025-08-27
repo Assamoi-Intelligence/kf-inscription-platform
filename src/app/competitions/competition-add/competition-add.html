@@ -1,0 +1,38 @@
+<form [formGroup]="competitionForm" class="flex flex-col gap-2 my-2">
+    <p-floatlabel variant="on">
+        <p-select
+            class="w-full"
+            appendTo="body"
+            inputId="type"
+            formControlName="type"
+            showIcon
+            iconDisplay="input"
+            [options]="competitionTypes"
+            optionLabel="label"
+            optionValue="value"
+        />
+        <label for="type">Type</label>
+    </p-floatlabel>
+    <p-floatlabel variant="on">
+        <p-datepicker
+          appendTo="body"
+          inputId="date"
+          formControlName="date"
+          showIcon
+          class="w-full"
+          iconDisplay="input"
+          [focusTrap]="false"
+          dateFormat="dd.mm.yy"
+        />
+        <label for="date">Date</label>
+    </p-floatlabel>
+    <p-button
+        styleClass="w-full"
+        (onClick)="onSubmit()"
+        [disabled]="!competitionForm.valid"
+        icon="pi pi-save"
+        label="Enregistrer"
+        severity="info"
+        [loading]="isAdding()"
+    />
+</form>
