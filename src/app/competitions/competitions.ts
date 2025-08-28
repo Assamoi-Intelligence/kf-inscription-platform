@@ -1,5 +1,5 @@
 import { inject, Injectable, Injector, runInInjectionContext } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, getDocs, updateDoc, writeBatch } from '@angular/fire/firestore';
 import { Competition } from '../models/competition';
 import { Participant } from '../models/participant';
 import { Participants } from '../participants/participants';
@@ -12,6 +12,14 @@ export class Competitions {
   private injector = inject(Injector);
   private participantsService = inject(Participants);
 
+  async get(id: string) {
+    return runInInjectionContext(this.injector, async () => {
+      const docRef = doc(this.firestore, 'competitions', id);
+      const docSnap = await getDoc(docRef);
+      return docSnap.data() as Competition;
+    });
+  }
+
   async getAll() {
     return runInInjectionContext(this.injector, async () => {
       const collectionRef = collection(this.firestore, 'competitions');
@@ -23,14 +31,20 @@ export class Competitions {
   getParticipants(competitionId: string) {
     return this.participantsService.getAllByCompetition(competitionId);
   }
+
+  getParticipants$(competionId: string) {
+    return this.participantsService.getAllByCompetitions$(competionId);
+  }
   
   async add(competition: Competition) {
     return runInInjectionContext(this.injector, () => {
+      const batch = writeBatch(this.firestore);
       const collectionRef = collection(this.firestore, 'competitions');
       const docRef = doc(collectionRef);
       competition.id = docRef.id;
       competition.createdAt = Date.now();
-      return addDoc(collectionRef, competition);
+      batch.set(docRef, competition);
+      return batch.commit();
     });
   }
 

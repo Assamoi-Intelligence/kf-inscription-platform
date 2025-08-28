@@ -1,6 +1,7 @@
 import { inject, Injectable, Injector, runInInjectionContext } from '@angular/core';
-import { addDoc, collection, doc, Firestore, getDocs, writeBatch } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, doc, Firestore, getDocs, writeBatch } from '@angular/fire/firestore';
 import { Participant } from '../models/participant';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +23,41 @@ export class Participants {
     });
   }
 
+  edit(participant: Participant) {
+    return runInInjectionContext(this.injector, () => {
+      const batch = writeBatch(this.firestore);
+      const docRef = doc(this.firestore, 'participants', participant.id);
+      const competionRef = doc(this.firestore, 'competitions', participant.competitionId, 'participants', participant.id);
+      batch.update(docRef, {...participant});
+      batch.update(competionRef, {...participant});
+      return batch.commit();
+    });
+  }
+
   async getAllByCompetition(competitionId: string) {
     return runInInjectionContext(this.injector, async () => {
       const collectionRef = collection(this.firestore, 'competitions', competitionId, 'participants');
       const docs = await getDocs(collectionRef);
       return docs.docs.map(el => el.data() as Participant)
+    });
+  }
+
+  getAllByCompetitions$(competitionId: string) {
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'competitions', competitionId, 'participants');
+      return collectionData(collectionRef).pipe(map(el => el.map(e => e  as Participant)));
+    });
+  }
+
+  delete(participant: Participant) {
+    return runInInjectionContext(this.injector, () => {
+      const batch = writeBatch(this.firestore);
+      const participantCollectionRef = collection(this.firestore, 'participants');
+      const docRef = doc(participantCollectionRef, participant.id);
+      const competionRef = doc(this.firestore, 'competitions', participant.competitionId, 'participants', participant.id);
+      batch.delete(docRef);
+      batch.delete(competionRef);
+      return batch.commit();
     });
   }
 }

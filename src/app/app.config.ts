@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
 
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideFirebaseApp(() => initializeApp(GlobalEnvironment.environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     provideAnimationsAsync(),

@@ -1,1 +1,69 @@
-<p>participant-edit works!</p>
+<form [formGroup]="participantForm" class="flex flex-col gap-2 my-2">
+    <p-float-label variant="on">
+        <input
+            class="w-full"
+            pInputText
+            type="text"
+            formControlName="lastname"
+            id="lastname"
+            pTooltip="Prénom"
+            required
+        />
+        <label for="lastname">Nom</label>
+    </p-float-label>
+    <p-floatlabel variant="on">
+        <input
+            class="w-full"
+            pInputText
+            type="text"
+            formControlName="firstname"
+            id="firstname"
+            pTooltip="Nom"
+            required
+        />
+        <label for="firstname">Prénom</label>
+    </p-floatlabel>
+    <p-float-label variant="on">
+        <p-inputnumber
+            formControlName="age"
+            id="age"
+            pTooltip="Age"
+            required
+            class="w-full"
+        />
+        <label for="age">Age</label>
+    </p-float-label>
+    <p-float-label variant="on">
+        <p-inputnumber
+            formControlName="weight"
+            id="weight"
+            pTooltip="Poids"
+            required
+            class="w-full"
+        />
+        <label for="weight">Poids</label>
+    </p-float-label>
+    <p-float-label variant="on">
+        <p-select 
+            appendTo="body"
+            class="w-full"
+            formControlName="gender"
+            id="gender"
+            pTooltip="Genre"
+            required
+            [options]="genders"
+            optionLabel="label"
+            optionValue="value"
+        />
+        <label for="gender">Genre</label>
+    </p-float-label>
+    <p-button
+        styleClass="w-full"
+        (onClick)="onSubmit()"
+        [disabled]="!participantForm.valid"
+        icon="pi pi-save"
+        label="Enregistrer"
+        severity="info"
+        [loading]="isEditing()"
+    />
+</form>
