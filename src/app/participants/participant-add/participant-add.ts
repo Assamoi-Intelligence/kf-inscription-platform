@@ -9,7 +9,8 @@ import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
-
+import { MultiSelectModule } from 'primeng/multiselect';
+import { disciplineList } from '../../disciplines/discipline.list';
 @Component({
   selector: 'app-participant-add',
   imports: [
@@ -20,6 +21,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     SelectModule,
     InputNumberModule,
+    MultiSelectModule
   ],
   templateUrl: './participant-add.html',
   styleUrl: './participant-add.css'
@@ -30,13 +32,18 @@ export class ParticipantAdd {
   private ref = inject(DynamicDialogRef);
   private participantsService = inject(Participants);
   protected isAdding = signal(false);
+
+  protected competitionType = this.competition.type;
+  protected disciplines = disciplineList;
   protected participantForm = inject(FormBuilder).nonNullable.group({
     firstname: ['', Validators.required],
     lastname: ['', Validators.required],
     gender: ['male', Validators.required],
     age: [, Validators.required],
     weight: [, Validators.required],
-    competitionId: [this.competition.id]
+    competitionId: [this.competition.id],
+    clubName: ['', Validators.required],
+    disciplines: [null , this.competitionType === 'tao-lu' ? Validators.required : null],
   });
 
   protected genders = [
@@ -46,10 +53,10 @@ export class ParticipantAdd {
 
   protected onSubmit() {
     this.isAdding.set(true);
-    const {firstname, lastname, gender, age, weight, competitionId} = this.participantForm.getRawValue();
+    const {firstname, lastname, gender, age, weight, competitionId, clubName, disciplines} = this.participantForm.getRawValue();
     const newParticipant = {
-      firstname, lastname, gender, 
-      age: age ?? 0, weight: weight ?? 0, competitionId, createdAt: Date.now()
+      firstname, lastname, gender, clubName,
+      age: age ?? 0, weight: weight ?? 0, competitionId, createdAt: Date.now(), disciplines
     } as Participant;
     this.participantsService.add(newParticipant).then(
       () => this.ref.close(true)

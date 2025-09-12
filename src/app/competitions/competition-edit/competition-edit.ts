@@ -51,6 +51,8 @@ export class CompetitionEdit implements OnInit {
   protected competitionForm = this.formBuilder.nonNullable.group({
     date: [new Date(), [Validators.required]],
     type: ['', [Validators.required]],
+    title: ['', [Validators.required]],
+    id: ['', Validators.required]
   });
 
   protected competitionTypes = [
@@ -69,7 +71,9 @@ export class CompetitionEdit implements OnInit {
         this.competition.set(competition);
         this.competitionForm.patchValue({
           date: new Date(competition.date),
-          type: competition.type
+          type: competition.type,
+          title: competition.title,
+          id: competition.id
         });
       }
     ).catch(err => console.log(err));
@@ -84,9 +88,9 @@ export class CompetitionEdit implements OnInit {
   }
 
   protected onSubmit() {
-    const {type, date} = this.competitionForm.getRawValue();
-    const newCompetition = <Competition>{type, date: date.getTime(),createdAt: Date.now()}
-    this.competitionService.add(newCompetition).then(
+    const {type, date, title, id} = this.competitionForm.getRawValue();
+    const updatedCompetition = <Competition>{type, date: date.getTime(), title, id}
+    this.competitionService.update(updatedCompetition).then(
       () => this.router.navigate(['competitions'])
     ).catch(err => console.log(err));
   }

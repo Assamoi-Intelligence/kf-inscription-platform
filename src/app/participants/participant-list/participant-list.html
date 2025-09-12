@@ -4,7 +4,8 @@
     </div>
     <p-divider />
   </div>
-  <p-table [tableStyle]="{ 'min-width': '50rem' }"
+  <p-table 
+    [tableStyle]="{ 'min-width': '50rem' }"
     [globalFilterFields]="['type', 'personsNames', 'id']" [paginator]="true"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowHover]="true" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-gridlines" #dt
@@ -12,7 +13,7 @@
     <ng-template pTemplate="caption">
       <div class="flex justify-between">
         <div class="flex gap-2">
-            <p-button  icon="pi pi-print" outlined pTooltip="Imprimer"/>
+            <p-button (onClick)="onPrint()" icon="pi pi-print" outlined pTooltip="Imprimer"/>
             <p-button (onClick)="onAddParticipant()" label="Ajouter" icon="pi pi-plus" [outlined]="true" severity="secondary" />
         </div>
         <p-iconField iconPosition="left">
@@ -28,6 +29,7 @@
             <th>Genre</th>
             <th>Age</th>
             <th>Poids</th>
+            <th>Club</th>
             <th>Actions</th>
         </tr>
     </ng-template>
@@ -38,6 +40,7 @@
             <td>{{ participant.gender }}</td>
             <td>{{ participant.age }} ans</td>
             <td>{{ participant.weight }} kg</td>
+            <td>{{ participant.clubName }}</td>
             <td class="flex gap-2">
               <p-button (onClick)="onEdit(participant)" icon="pi pi-pencil" severity="secondary" [outlined]="true" />
               <p-button (onClick)="onDelete(participant)" icon="pi pi-trash" severity="danger" [outlined]="true" />

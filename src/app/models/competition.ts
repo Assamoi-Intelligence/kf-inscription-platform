@@ -5,5 +5,6 @@ export interface Competition {
   date: number,
   type: 'sanda' | 'tao-lu',
   participants: Participant[],
-  createdAt: number
+  createdAt: number,
+  title: string
 }

@@ -1,0 +1,31 @@
+Participant
+    Ajouter le nom du club à l'inscription 
+
+Imprimer
+    Par age
+    Par catégorie
+    Par poids
+
+Sanda
+Format Impression
+    Categorie(s) age
+        Categorie(s) poids
+            Participant correspondant
+
+
+TaoLu
+Format Impression
+    Categorie(s) age
+        Categorie(s) rubriques
+            Participant correspondant
+
+Tao Lu
+    inscription
+        Rubriques,
+        L'âge
+        Le nom
+        Nom du club
+        Genre
+
+
+

@@ -7,12 +7,13 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-competition-add',
   imports: [
     ReactiveFormsModule, DatePickerModule, FloatLabelModule, 
-    SelectModule, ButtonModule
+    SelectModule, ButtonModule, InputTextModule
   ],
   templateUrl: './competition-add.html',
   styleUrl: './competition-add.css'
@@ -26,6 +27,7 @@ export class CompetitionAdd {
   protected competitionForm = this.formBuilder.nonNullable.group({
     date: [new Date(), [Validators.required]],
     type: ['', [Validators.required]],
+    title: ['', [Validators.required]],
   });
 
   protected competitionTypes = [
@@ -35,8 +37,8 @@ export class CompetitionAdd {
 
   protected onSubmit() {
     this.isAdding.set(true);
-    const {type, date} = this.competitionForm.getRawValue();
-    const newCompetition = <Competition>{type, date: date.getTime(),createdAt: Date.now()}
+    const {type, date, title} = this.competitionForm.getRawValue();
+    const newCompetition = <Competition>{type, date: date.getTime(),createdAt: Date.now(), title}
     this.competitionsService.add(newCompetition).then(
       () => this.dialogRef.close(true)
     ).catch(err => console.log(err)).finally(() => this.isAdding.set(false));

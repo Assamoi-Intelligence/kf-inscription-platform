@@ -1,3 +1,5 @@
+import { Discipline } from "../disciplines/discipline.list";
+
 export interface Participant {
   id: string,
   lastname: string,
@@ -7,4 +9,6 @@ export interface Participant {
   gender: 'male' | 'female',
   competitionId: string,
   createdAt: number,
+  clubName: string,
+  disciplines: Discipline[] | null
 }

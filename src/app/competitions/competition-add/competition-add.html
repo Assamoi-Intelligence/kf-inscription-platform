@@ -1,4 +1,15 @@
 <form [formGroup]="competitionForm" class="flex flex-col gap-2 my-2">
+    <p-float-label variant="on">
+        <input
+            class="w-full"
+            pInputText
+            type="text"
+            formControlName="title"
+            id="title"
+            required
+        />
+        <label for="title">Titre competion</label>
+    </p-float-label>
     <p-floatlabel variant="on">
         <p-select
             class="w-full"

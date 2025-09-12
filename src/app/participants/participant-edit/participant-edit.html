@@ -43,6 +43,12 @@
         />
         <label for="weight">Poids</label>
     </p-float-label>
+    @if (competitionType) {
+        <p-floatlabel class="w-full md:w-80" variant="on">
+            <p-multiselect appendTo="body" id="disciplines" formControlName="disciplines" [options]="disciplines" optionLabel="name" filter class="w-full" />
+            <label for="disciplines">Rubriques</label>
+        </p-floatlabel>
+    }
     <p-float-label variant="on">
         <p-select 
             appendTo="body"
@@ -56,6 +62,17 @@
             optionValue="value"
         />
         <label for="gender">Genre</label>
+    </p-float-label>
+    <p-float-label variant="on">
+        <input
+            class="w-full"
+            pInputText
+            type="text"
+            formControlName="clubName"
+            id="clubName"
+            required
+        />
+        <label for="clubName">Club</label>
     </p-float-label>
     <p-button
         styleClass="w-full"

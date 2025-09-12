@@ -19,6 +19,7 @@ import { Participant } from '../../models/participant';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ParticipantEdit } from '../participant-edit/participant-edit';
 import { Competition } from '../../models/competition';
+import { PrintService } from '../../print/print.service';
 
 @Component({
   selector: 'app-participant-list',
@@ -39,6 +40,7 @@ export class ParticipantList {
   private dialogService = inject(DialogService);
   private participantsService = inject(Participants);
   private confirmationService = inject(ConfirmationService);
+  private printService = inject(PrintService);
 
   onAddParticipant()  {
     this.dialogService.open(ParticipantAdd, {
@@ -52,7 +54,7 @@ export class ParticipantList {
     this.dialogService.open(ParticipantEdit, {
       header: 'Editer un participant',
       closable: true,
-      data: {participant}
+      data: {participant, competition: this.competition()}
     });
   }
 
@@ -67,5 +69,10 @@ export class ParticipantList {
         }).catch(err => console.log(err)).finally(() => this.confirmationService.close());
       }
     });
+  }
+
+  onPrint() {
+    console.log('Print')
+    this.printService.printCompetition(this.participantsList());
   }
 }

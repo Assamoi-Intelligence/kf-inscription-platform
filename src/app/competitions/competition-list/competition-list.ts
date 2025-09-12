@@ -17,6 +17,7 @@ import { Competitions } from '../competitions';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ParticipantAdd } from '../../participants/participant-add/participant-add';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PrintService } from '../../print/print.service';
 
 @Component({
   selector: 'app-competition-list',
@@ -37,8 +38,13 @@ export class CompetitionList implements OnInit {
   private competitionsService = inject(Competitions);
   private confirmationService = inject(ConfirmationService);
   private destroyRef = inject(DestroyRef);
+  private printService = inject(PrintService);
 
   ngOnInit(): void {
+    this.getAll();
+  }
+
+  getAll() {
     this.competitionsService.getAll().then(list => this.competitionList.set(list));
   }
 
@@ -74,7 +80,11 @@ export class CompetitionList implements OnInit {
       closable: true,
       data: {competition}
     }).onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(isAdded => {
-      if (isAdded) this.competitionsService.getAll();
+      if (isAdded) this.getAll();
     });
+  }
+
+  onPrint(competition: Competition) {
+    this.printService.printCompetition(competition.participants);
   }
 }
