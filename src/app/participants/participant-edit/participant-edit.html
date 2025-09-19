@@ -43,8 +43,8 @@
         />
         <label for="weight">Poids</label>
     </p-float-label>
-    @if (competitionType) {
-        <p-floatlabel class="w-full md:w-80" variant="on">
+    @if (competitionType === 'tao-lu') {
+        <p-floatlabel class="w-full" variant="on">
             <p-multiselect appendTo="body" id="disciplines" formControlName="disciplines" [options]="disciplines" optionLabel="name" filter class="w-full" />
             <label for="disciplines">Rubriques</label>
         </p-floatlabel>
@@ -80,7 +80,6 @@
         [disabled]="!participantForm.valid"
         icon="pi pi-save"
         label="Enregistrer"
-        severity="info"
         [loading]="isEditing()"
     />
 </form>

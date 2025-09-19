@@ -44,8 +44,23 @@ export class CompetitionList implements OnInit {
     this.getAll();
   }
 
-  getAll() {
-    this.competitionsService.getAll().then(list => this.competitionList.set(list));
+  async getAll() {
+    try {
+      const list = await this.competitionsService.getAll();
+      const participantPromises = list.map(async (competition) => {
+        try {
+          competition.participants = await this.competitionsService.getParticipants(competition.id);
+        } catch (err) {
+          console.log(err);
+          competition.participants = []; // fallback
+        }
+        return competition;
+      });
+      await Promise.all(participantPromises);
+      this.competitionList.set(list);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   onAddCompetition()  {
@@ -78,13 +93,16 @@ export class CompetitionList implements OnInit {
     this.dialogService.open(ParticipantAdd, {
       header: 'Ajouter une compétion',
       closable: true,
-      data: {competition}
+      data: {competition},
+      width: '35%',
     }).onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(isAdded => {
       if (isAdded) this.getAll();
     });
   }
 
   onPrint(competition: Competition) {
-    //this.printService.printCompetition(competition.participants);
+    if (!competition.participants || competition.participants.length === 0) return;
+    if (competition.type === 'sanda') this.printService.printSandaCompetition(competition.participants);
+    if (competition.type === 'tao-lu') this.printService.printTaoLuCompetition(competition.participants);
   }
 }

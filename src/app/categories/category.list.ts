@@ -27,11 +27,11 @@ export const ageCategories = [
 
 // Disciplines de test (vous devez les adapter selon votre liste)
 const testDisciplines: Discipline[] = [
-    { id: '1', type: 'Main nue', name: 'Chang Quan', createdAt: Date.now() },
-    { id: '2', type: 'Main nue', name: 'Taiji Quan', createdAt: Date.now() },
-    { id: '3', type: 'Arme', name: 'Dao Shu', createdAt: Date.now() },
-    { id: '4', type: 'Arme', name: 'Jian Shu', createdAt: Date.now() },
-    { id: '5', type: 'Main nue', name: 'Nan Quan', createdAt: Date.now() }
+    { id: '1', type: 'Main nue', name: 'Chang Quan', },
+    { id: '2', type: 'Main nue', name: 'Taiji Quan', },
+    { id: '3', type: 'Arme', name: 'Dao Shu', },
+    { id: '4', type: 'Arme', name: 'Jian Shu', },
+    { id: '5', type: 'Main nue', name: 'Nan Quan', }
   ];
   
   // Participants de test pour Sanda (sans disciplines ou avec sanda)

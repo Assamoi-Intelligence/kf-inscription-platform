@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -27,7 +27,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
   templateUrl: './participant-edit.html',
   styleUrl: './participant-edit.css'
 })
-export class ParticipantEdit {
+export class ParticipantEdit implements OnInit {
   private config = inject(DynamicDialogConfig);
   private participant = this.config.data.participant as Participant;
   private competition = this.config.data.competition as Competition;
@@ -46,16 +46,22 @@ export class ParticipantEdit {
     age: [this.participant.age, Validators.required],
     weight: [this.participant.weight, Validators.required],
     clubName: [this.participant.clubName, Validators.required],
-    disciplines: new FormControl<Discipline[]>(
-      this.participant.disciplines || [], 
+    disciplines: new FormControl<Discipline[]>([], 
       this.competitionType === 'tao-lu' ? Validators.required : null
     ),
-  }); 
+  });
 
   protected genders = [
     { label: 'Masculin', value: 'male' },
     { label: 'Feminin', value: 'female' }
   ]
+
+  ngOnInit() {
+    if (this.competitionType !== 'tao-lu') return;
+    this.participantForm.patchValue({
+      disciplines: this.participant.disciplines
+    });
+  }
 
   protected onSubmit() {
     this.isEditing.set(true);

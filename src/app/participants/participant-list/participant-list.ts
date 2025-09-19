@@ -21,6 +21,7 @@ import { ParticipantEdit } from '../participant-edit/participant-edit';
 import { Competition } from '../../models/competition';
 import { PrintService } from '../../print/print.service';
 import { sandaTestParticipants, taoLuTestParticipants } from '../../categories/category.list';
+import { ChipModule } from 'primeng/chip';
 
 @Component({
   selector: 'app-participant-list',
@@ -28,7 +29,7 @@ import { sandaTestParticipants, taoLuTestParticipants } from '../../categories/c
     CommonModule, RouterModule, TableModule,
     IconFieldModule, InputIconModule, InputTextModule,
     ButtonModule, DialogModule, TagModule, DividerModule,
-    ConfirmDialogModule
+    ConfirmDialogModule, ChipModule
   ],
   templateUrl: './participant-list.html',
   styleUrl: './participant-list.css',
@@ -47,6 +48,7 @@ export class ParticipantList {
     this.dialogService.open(ParticipantAdd, {
       header: 'Ajouter un participant',
       closable: true,
+      width: '35%',
       data: {competition: this.competition()}
     });
   }
@@ -55,6 +57,7 @@ export class ParticipantList {
     this.dialogService.open(ParticipantEdit, {
       header: 'Editer un participant',
       closable: true,
+      width: '35%',
       data: {participant, competition: this.competition()}
     });
   }
@@ -74,10 +77,12 @@ export class ParticipantList {
 
   onPrint() {
     console.log('Print')
-    if (this.competition()?.type === 'sanda') {
-      this.printService.printSandaCompetition(sandaTestParticipants);
-    } else {
-      this.printService.printTaoLuCompetition(taoLuTestParticipants);
-    }
+    // if (this.competition()?.type === 'sanda') {
+    //   this.printService.printSandaCompetition(sandaTestParticipants);
+    // } else {
+    //   this.printService.printTaoLuCompetition(taoLuTestParticipants);
+    // }
+    if (this.competition()?.type === 'sanda') this.printService.printSandaCompetition(this.participantsList());
+    if (this.competition()?.type === 'tao-lu') this.printService.printTaoLuCompetition(this.participantsList());
   }
 }

@@ -13,8 +13,8 @@
     <ng-template pTemplate="caption">
       <div class="flex justify-between">
         <div class="flex gap-2">
-            <p-button (onClick)="onPrint()" icon="pi pi-print" outlined pTooltip="Imprimer"/>
-            <p-button (onClick)="onAddParticipant()" label="Ajouter" icon="pi pi-plus" [outlined]="true" severity="secondary" />
+            <p-button [disabled]="participantsList().length === 0" (onClick)="onPrint()" icon="pi pi-print" outlined pTooltip="Imprimer"/>
+            <p-button (onClick)="onAddParticipant()" label="Ajouter" icon="pi pi-plus" />
         </div>
         <p-iconField iconPosition="left">
           <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
@@ -30,6 +30,9 @@
             <th>Age</th>
             <th>Poids</th>
             <th>Club</th>
+            @if(this.competition()?.type === 'tao-lu') {
+              <th class="w-[30rem]">Rubrique</th>
+            }
             <th>Actions</th>
         </tr>
     </ng-template>
@@ -41,9 +44,23 @@
             <td>{{ participant.age }} ans</td>
             <td>{{ participant.weight }} kg</td>
             <td>{{ participant.clubName }}</td>
-            <td class="flex gap-2">
-              <p-button (onClick)="onEdit(participant)" icon="pi pi-pencil" severity="secondary" [outlined]="true" />
-              <p-button (onClick)="onDelete(participant)" icon="pi pi-trash" severity="danger" [outlined]="true" />
+            @if(this.competition()?.type === 'tao-lu') {
+              <td>
+                <div class="flex gap-2">
+                  @for (discipline of participant.disciplines.slice(0, participant.disciplines.length > 4 ? 3 : participant.disciplines.length); track discipline) {
+                    <p-chip class="text-[0.8rem]" size="small" [label]="discipline.name"></p-chip>
+                  }
+                  @if (participant.disciplines.length > 4) {
+                    <span class="text-[0.8rem] text-gray-500 self-center">...</span>
+                  }
+                </div>
+              </td>
+            }
+            <td class="">
+              <div class="flex gap-2">
+                <p-button (onClick)="onEdit(participant)" icon="pi pi-pencil" severity="secondary" [outlined]="true" />
+                <p-button (onClick)="onDelete(participant)" icon="pi pi-trash" severity="danger" [outlined]="true" />
+              </div>
             </td>
         </tr>
     </ng-template>
