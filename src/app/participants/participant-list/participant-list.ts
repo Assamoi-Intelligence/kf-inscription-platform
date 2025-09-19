@@ -20,6 +20,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ParticipantEdit } from '../participant-edit/participant-edit';
 import { Competition } from '../../models/competition';
 import { PrintService } from '../../print/print.service';
+import { sandaTestParticipants, taoLuTestParticipants } from '../../categories/category.list';
 
 @Component({
   selector: 'app-participant-list',
@@ -73,6 +74,10 @@ export class ParticipantList {
 
   onPrint() {
     console.log('Print')
-    this.printService.printCompetition(this.participantsList());
+    if (this.competition()?.type === 'sanda') {
+      this.printService.printSandaCompetition(sandaTestParticipants);
+    } else {
+      this.printService.printTaoLuCompetition(taoLuTestParticipants);
+    }
   }
 }

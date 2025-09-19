@@ -29,3 +29,266 @@ Tao Lu
 
 
 
+12/09/2025
+    Séparation fiile/garcon lors de l'impression
+        Pour chaque ligne mettre un tableau
+        Tao lu : Nom  n/5 n/3 n/2 total Classement
+
+        Sanda
+        Nom prénom Poids(ordre décroissant)
+
+
+
+
+
+// printSandaCompetition(participants: Participant[]) {
+  //   // Grouper les participants par catégorie d'âge puis par poids
+  //   const groupedParticipants = participants.reduce((acc, participant) => {
+  //     const ageCategory = this.getAgeCategory(participant.age);
+  //     const weightCategory = this.getWeightCategory(participant.weight);
+      
+  //     if (!acc[ageCategory]) {
+  //       acc[ageCategory] = {};
+  //     }
+  //     if (!acc[ageCategory][weightCategory]) {
+  //       acc[ageCategory][weightCategory] = [];
+  //     }
+  //     acc[ageCategory][weightCategory].push(participant);
+      
+  //     return acc;
+  //   }, {} as Record<string, Record<string, Participant[]>>);
+  
+  //   const content: any[] = [
+  //     { text: 'Competition Sanda - Format Impression', style: 'header' },
+  //     { text: `Généré le ${new Date().toLocaleDateString('fr-FR')}`, style: 'subheader' },
+  //     { text: '\n' }
+  //   ];
+  
+  //   // Parcourir chaque catégorie d'âge
+  //   Object.entries(groupedParticipants).forEach(([ageCategory, weightGroups]) => {
+  //     content.push({
+  //       text: ageCategory,
+  //       style: 'ageCategory',
+  //       pageBreak: content.length > 3 ? 'before' : undefined
+  //     });
+  
+  //     // Parcourir chaque catégorie de poids dans cette tranche d'âge
+  //     Object.entries(weightGroups).forEach(([weightCategory, participantList]) => {
+  //       content.push({
+  //         text: `  ${weightCategory}`,
+  //         style: 'weightCategory',
+  //         margin: [20, 10, 0, 5] as [number, number, number, number]
+  //       });
+  
+  //       // Séparer par genre
+  //       const maleParticipants = participantList.filter(p => p.gender === 'male');
+  //       const femaleParticipants = participantList.filter(p => p.gender === 'female');
+  
+  //       if (maleParticipants.length > 0) {
+  //         content.push({
+  //           text: '    Masculin',
+  //           style: 'genderHeader',
+  //           margin: [40, 5, 0, 3] as [number, number, number, number]
+  //         });
+          
+  //         maleParticipants.forEach((participant, index) => {
+  //           content.push({
+  //             text: `      ${index + 1}. ${participant.lastname} ${participant.firstname} - ${participant.clubName} (${participant.age} ans, ${participant.weight} kg)`,
+  //             style: 'participant',
+  //             margin: [60, 2, 0, 2] as [number, number, number, number]
+  //           });
+  //         });
+  //       }
+  
+  //       if (femaleParticipants.length > 0) {
+  //         content.push({
+  //           text: '    Féminin',
+  //           style: 'genderHeader',
+  //           margin: [40, 5, 0, 3] as [number, number, number, number]
+  //         });
+          
+  //         femaleParticipants.forEach((participant, index) => {
+  //           content.push({
+  //             text: `      ${index + 1}. ${participant.lastname} ${participant.firstname} - ${participant.clubName} (${participant.age} ans, ${participant.weight} kg)`,
+  //             style: 'participant',
+  //             margin: [60, 2, 0, 2] as [number, number, number, number]
+  //           });
+  //         });
+  //       }
+  //     });
+  
+  //     content.push({ text: '\n' });
+  //   });
+  
+  //   const documentDefinition: any = {
+  //     content,
+  //     styles: {
+  //       header: {
+  //         fontSize: 20,
+  //         bold: true,
+  //         alignment: 'center',
+  //         margin: [0, 0, 0, 20] as [number, number, number, number]
+  //       },
+  //       subheader: {
+  //         fontSize: 12,
+  //         alignment: 'center',
+  //         color: '#666666',
+  //         margin: [0, 0, 0, 5] as [number, number, number, number]
+  //       },
+  //       ageCategory: {
+  //         fontSize: 16,
+  //         bold: true,
+  //         color: '#2196F3',
+  //         margin: [0, 15, 0, 10] as [number, number, number, number]
+  //       },
+  //       weightCategory: {
+  //         fontSize: 14,
+  //         bold: true,
+  //         color: '#4CAF50'
+  //       },
+  //       genderHeader: {
+  //         fontSize: 12,
+  //         bold: true,
+  //         color: '#FF9800'
+  //       },
+  //       participant: {
+  //         fontSize: 11,
+  //         color: '#333333'
+  //       }
+  //     }
+  //   };
+  
+  //   pdfMake.createPdf(documentDefinition).download('sanda-competition.pdf');
+  // }
+  
+  // // Impression format TaoLu
+  // printTaoLuCompetition(participants: Participant[]) {
+  //   // Grouper les participants par catégorie d'âge puis par discipline
+  //   const groupedParticipants = participants.reduce((acc, participant) => {
+  //     const ageCategory = this.getAgeCategory(participant.age);
+      
+  //     if (!acc[ageCategory]) {
+  //       acc[ageCategory] = {};
+  //     }
+      
+  //     // Pour chaque discipline du participant
+  //     if (participant.disciplines && participant.disciplines.length > 0) {
+  //       participant.disciplines.forEach(discipline => {
+  //         if (!acc[ageCategory][discipline.name]) {
+  //           acc[ageCategory][discipline.name] = [];
+  //         }
+  //         acc[ageCategory][discipline.name].push(participant);
+  //       });
+  //     } else {
+  //       // Participants sans discipline
+  //       if (!acc[ageCategory]['Sans discipline']) {
+  //         acc[ageCategory]['Sans discipline'] = [];
+  //       }
+  //       acc[ageCategory]['Sans discipline'].push(participant);
+  //     }
+      
+  //     return acc;
+  //   }, {} as Record<string, Record<string, Participant[]>>);
+  
+  //   const content: any[] = [
+  //     { text: 'Competition TaoLu - Format Impression', style: 'header' },
+  //     { text: `Généré le ${new Date().toLocaleDateString('fr-FR')}`, style: 'subheader' },
+  //     { text: '\n' }
+  //   ];
+  
+  //   // Parcourir chaque catégorie d'âge
+  //   Object.entries(groupedParticipants).forEach(([ageCategory, disciplineGroups]) => {
+  //     content.push({
+  //       text: ageCategory,
+  //       style: 'ageCategory',
+  //       pageBreak: content.length > 3 ? 'before' : undefined
+  //     });
+  
+  //     // Parcourir chaque discipline dans cette tranche d'âge
+  //     Object.entries(disciplineGroups).forEach(([disciplineName, participantList]) => {
+  //       content.push({
+  //         text: `  ${disciplineName}`,
+  //         style: 'disciplineCategory',
+  //         margin: [20, 10, 0, 5] as [number, number, number, number]
+  //       });
+  
+  //       // Séparer par genre
+  //       const maleParticipants = participantList.filter(p => p.gender === 'male');
+  //       const femaleParticipants = participantList.filter(p => p.gender === 'female');
+  
+  //       if (maleParticipants.length > 0) {
+  //         content.push({
+  //           text: '    Masculin',
+  //           style: 'genderHeader',
+  //           margin: [40, 5, 0, 3] as [number, number, number, number]
+  //         });
+          
+  //         maleParticipants.forEach((participant, index) => {
+  //           content.push({
+  //             text: `      ${index + 1}. ${participant.lastname} ${participant.firstname} - ${participant.clubName} (${participant.age} ans)`,
+  //             style: 'participant',
+  //             margin: [60, 2, 0, 2] as [number, number, number, number]
+  //           });
+  //         });
+  //       }
+  
+  //       if (femaleParticipants.length > 0) {
+  //         content.push({
+  //           text: '    Féminin',
+  //           style: 'genderHeader',
+  //           margin: [40, 5, 0, 3] as [number, number, number, number]
+  //         });
+          
+  //         femaleParticipants.forEach((participant, index) => {
+  //           content.push({
+  //             text: `      ${index + 1}. ${participant.lastname} ${participant.firstname} - ${participant.clubName} (${participant.age} ans)`,
+  //             style: 'participant',
+  //             margin: [60, 2, 0, 2] as [number, number, number, number]
+  //           });
+  //         });
+  //       }
+  //     });
+  
+  //     content.push({ text: '\n' });
+  //   });
+  
+  //   const documentDefinition: any = {
+  //     content,
+  //     styles: {
+  //       header: {
+  //         fontSize: 20,
+  //         bold: true,
+  //         alignment: 'center',
+  //         margin: [0, 0, 0, 20] as [number, number, number, number]
+  //       },
+  //       subheader: {
+  //         fontSize: 12,
+  //         alignment: 'center',
+  //         color: '#666666',
+  //         margin: [0, 0, 0, 5] as [number, number, number, number]
+  //       },
+  //       ageCategory: {
+  //         fontSize: 16,
+  //         bold: true,
+  //         color: '#2196F3',
+  //         margin: [0, 15, 0, 10] as [number, number, number, number]
+  //       },
+  //       disciplineCategory: {
+  //         fontSize: 14,
+  //         bold: true,
+  //         color: '#9C27B0'
+  //       },
+  //       genderHeader: {
+  //         fontSize: 12,
+  //         bold: true,
+  //         color: '#FF9800'
+  //       },
+  //       participant: {
+  //         fontSize: 11,
+  //         color: '#333333'
+  //       }
+  //     }
+  //   };
+  
+  //   pdfMake.createPdf(documentDefinition).download('taolu-competition.pdf');
+  // }

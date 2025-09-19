@@ -85,6 +85,6 @@ export class CompetitionList implements OnInit {
   }
 
   onPrint(competition: Competition) {
-    this.printService.printCompetition(competition.participants);
+    //this.printService.printCompetition(competition.participants);
   }
 }
