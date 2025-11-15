@@ -36,3 +36,8 @@ Tao Lu
 
         Sanda
         Nom prénom Poids(ordre décroissant)
+
+
+26/09/2025
+    Editer les catégories d'âges
+    Enlever le champs poids lors de l'inscription d'un participant pour le tao
