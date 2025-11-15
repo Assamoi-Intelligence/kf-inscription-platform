@@ -40,7 +40,7 @@ export class ParticipantAdd {
     lastname: ['', Validators.required],
     gender: ['male', Validators.required],
     age: [, Validators.required],
-    weight: [, Validators.required],
+    weight: [null , this.competitionType === 'tao-lu' ? Validators.required : null],
     competitionId: [this.competition.id],
     clubName: ['', Validators.required],
     disciplines: [null , this.competitionType === 'tao-lu' ? Validators.required : null],

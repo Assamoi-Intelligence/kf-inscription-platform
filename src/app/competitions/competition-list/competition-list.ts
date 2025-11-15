@@ -68,7 +68,7 @@ export class CompetitionList implements OnInit {
       header: 'Ajouter une compétion',
       closable: true,
     }).onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(isAdded => {
-      if (isAdded) this.competitionsService.getAll();
+      if (isAdded) this.getAll();
     });
   }
 

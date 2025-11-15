@@ -8,6 +8,7 @@
             id="lastname"
             pTooltip="Prénom"
             required
+            [autofocus]="true"
         />
         <label for="lastname">Nom</label>
     </p-float-label>
@@ -33,17 +34,18 @@
         />
         <label for="age">Age</label>
     </p-float-label>
-    <p-float-label variant="on">
-        <p-inputnumber
-            formControlName="weight"
-            id="weight"
-            pTooltip="Poids"
-            required
-            class="w-full"
-        />
-        <label for="weight">Poids</label>
-    </p-float-label>
+    
     @if (competitionType === 'tao-lu') {
+        <p-float-label variant="on">
+            <p-inputnumber
+                formControlName="weight"
+                id="weight"
+                pTooltip="Poids"
+                required
+                class="w-full"
+            />
+            <label for="weight">Poids</label>
+        </p-float-label>
         <p-floatlabel class="w-full" variant="on">
             <p-multiselect appendTo="body" id="disciplines" formControlName="disciplines" [options]="disciplines" optionLabel="name" filter class="w-full" />
             <label for="disciplines">Rubriques</label>

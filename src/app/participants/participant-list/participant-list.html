@@ -28,7 +28,7 @@
             <th>Prénom</th>
             <th>Genre</th>
             <th>Age</th>
-            <th>Poids</th>
+            @if(this.competition()?.type === 'tao-lu') {<th>Poids</th>}
             <th>Club</th>
             @if(this.competition()?.type === 'tao-lu') {
               <th class="w-[30rem]">Rubrique</th>
@@ -40,9 +40,9 @@
         <tr>
             <td>{{ participant.lastname }}</td>
             <td>{{ participant.firstname }}</td>
-            <td>{{ participant.gender }}</td>
+            <td>{{ participant.gender === 'male' ? 'M' : 'F' }}</td>
             <td>{{ participant.age }} ans</td>
-            <td>{{ participant.weight }} kg</td>
+            @if(this.competition()?.type === 'tao-lu') {<td>{{ participant.weight }} kg</td>}
             <td>{{ participant.clubName }}</td>
             @if(this.competition()?.type === 'tao-lu') {
               <td>
