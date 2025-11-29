@@ -102,7 +102,8 @@ export class CompetitionList implements OnInit {
 
   onPrint(competition: Competition) {
     if (!competition.participants || competition.participants.length === 0) return;
-    if (competition.type === 'sanda') this.printService.printSandaCompetition(competition.participants);
-    if (competition.type === 'tao-lu') this.printService.printTaoLuCompetition(competition.participants);
+    const {type, ageCategories, participants} = competition;
+    if (type === 'sanda') this.printService.printSandaCompetition(participants, ageCategories);
+    if (type === 'tao-lu') this.printService.printTaoLuCompetition(participants, ageCategories);
   }
 }

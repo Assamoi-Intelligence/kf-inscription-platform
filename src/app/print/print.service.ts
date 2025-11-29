@@ -2,15 +2,22 @@ import { Injectable } from '@angular/core';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Participant } from '../models/participant';
-pdfMake.vfs = pdfFonts.vfs; 
+import { AgeCategories } from '../models/competition';
+import { ageCategories } from '../categories/category.list';
+pdfMake.vfs = pdfFonts.vfs;
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrintService {
 
+  private getAgeCategory(age: number, ageCategories: AgeCategories): string {
+    if (!ageCategories || ageCategories.length === 0) return this.defaultAgeCategories(age);
+    const  ageCategoryFound = ageCategories.find(({min, max}) => age >= min && age <= max);
+    return ageCategoryFound ? `${ageCategoryFound.min}-${ageCategoryFound.max} ans` : "Hors catégorie"
+  }
 
-  private getAgeCategory(age: number): string {
+  private defaultAgeCategories(age: number) {
     if (age >= 6 && age <= 7) return "06-07 ans";
     if (age >= 8 && age <= 9) return "08-09 ans";
     if (age >= 10 && age <= 11) return "10-11 ans";
@@ -20,7 +27,7 @@ export class PrintService {
     if (age >= 18 && age <= 40) return "18-40 ans";
     return "Hors catégorie";
   }
-  
+
   private getWeightCategory(weight: number): string {
     if (weight <= 48) return "Catégorie 48 kg (<= 48kg)";
     if (weight <= 52) return "Catégorie 52 kg (48 kg < poids <= 52 kg)";
@@ -35,21 +42,21 @@ export class PrintService {
     return "Plus de 90 kg (poids > 90 kg)";
   }
 
-  
-  private createSandaContentByGender(participants: Participant[], gender: 'male' | 'female'): any[] {
+
+  private createSandaContentByGender(participants: Participant[], gender: 'male' | 'female', ageCategories: AgeCategories): any[] {
     const genderLabel = gender === 'male' ? 'MASCULIN' : 'FÉMININ';
-    
+
     // Filtrer par genre et grouper par âge puis poids
     const genderParticipants = participants.filter(p => p.gender === gender);
-    
+
     if (genderParticipants.length === 0) {
       return [];
     }
-  
+
     const groupedParticipants = genderParticipants.reduce((acc, participant) => {
-      const ageCategory = this.getAgeCategory(participant.age);
+      const ageCategory = this.getAgeCategory(participant.age, ageCategories);
       const weightCategory = this.getWeightCategory(participant.weight);
-      
+
       if (!acc[ageCategory]) {
         acc[ageCategory] = {};
       }
@@ -57,10 +64,10 @@ export class PrintService {
         acc[ageCategory][weightCategory] = [];
       }
       acc[ageCategory][weightCategory].push(participant);
-      
+
       return acc;
     }, {} as Record<string, Record<string, Participant[]>>);
-  
+
     const content: any[] = [
       {
         text: `${genderLabel}`,
@@ -69,7 +76,7 @@ export class PrintService {
       },
       { text: '\n' }
     ];
-  
+
     // Parcourir chaque catégorie d'âge
     Object.entries(groupedParticipants).forEach(([ageCategory, weightGroups]) => {
       content.push({
@@ -77,7 +84,7 @@ export class PrintService {
         style: 'ageCategory',
         margin: [0, 15, 0, 10] as [number, number, number, number]
       });
-  
+
       // Parcourir chaque catégorie de poids dans cette tranche d'âge
       Object.entries(weightGroups).forEach(([weightCategory, participantList]) => {
         content.push({
@@ -85,10 +92,10 @@ export class PrintService {
           style: 'weightCategory',
           margin: [0, 10, 0, 5] as [number, number, number, number]
         });
-  
+
         // Trier par poids décroissant
         const sortedParticipants = participantList.sort((a, b) => b.weight - a.weight);
-  
+
         content.push({
           table: {
             headerRows: 1,
@@ -113,32 +120,32 @@ export class PrintService {
         });
       });
     });
-  
+
     return content;
   }
-  
+
   // Impression format Sanda séparé par genre
-  printSandaCompetition(participants: Participant[]) {
+  printSandaCompetition(participants: Participant[], ageCategories: AgeCategories) {
     const content: any[] = [
       { text: 'Competition Sanda', style: 'header' },
       { text: `Généré le ${new Date().toLocaleDateString('fr-FR')}`, style: 'subheader' },
       { text: '\n' }
     ];
-  
+
     // Ajouter tout le contenu MASCULIN
-    const maleContent = this.createSandaContentByGender(participants, 'male');
+    const maleContent = this.createSandaContentByGender(participants, 'male', ageCategories);
     if (maleContent.length > 0) {
       // Première page pour les hommes (pas de pageBreak)
       maleContent[0].pageBreak = undefined;
       content.push(...maleContent);
     }
-  
+
     // Ajouter tout le contenu FÉMININ
-    const femaleContent = this.createSandaContentByGender(participants, 'female');
+    const femaleContent = this.createSandaContentByGender(participants, 'female', ageCategories);
     if (femaleContent.length > 0) {
       content.push(...femaleContent);
     }
-  
+
     const documentDefinition: any = {
       content,
       styles: {
@@ -179,28 +186,28 @@ export class PrintService {
         }
       }
     };
-  
+
     pdfMake.createPdf(documentDefinition).download('sanda-competition.pdf');
   }
-  
+
   // Fonction helper pour créer le contenu TaoLu par genre
-  private createTaoLuContentByGender(participants: Participant[], gender: 'male' | 'female'): any[] {
+  private createTaoLuContentByGender(participants: Participant[], gender: 'male' | 'female', ageCategories: AgeCategories): any[] {
     const genderLabel = gender === 'male' ? 'MASCULIN' : 'FÉMININ';
-    
+
     // Filtrer par genre et grouper par âge puis discipline
     const genderParticipants = participants.filter(p => p.gender === gender);
-    
+
     if (genderParticipants.length === 0) {
       return [];
     }
-  
+
     const groupedParticipants = genderParticipants.reduce((acc, participant) => {
-      const ageCategory = this.getAgeCategory(participant.age);
-      
+      const ageCategory = this.getAgeCategory(participant.age, ageCategories);
+
       if (!acc[ageCategory]) {
         acc[ageCategory] = {};
       }
-      
+
       // Pour chaque discipline du participant
       if (participant.disciplines && participant.disciplines.length > 0) {
         participant.disciplines.forEach(discipline => {
@@ -216,10 +223,10 @@ export class PrintService {
         }
         acc[ageCategory]['Sans discipline'].push(participant);
       }
-      
+
       return acc;
     }, {} as Record<string, Record<string, Participant[]>>);
-  
+
     const content: any[] = [
       {
         text: `${genderLabel}`,
@@ -228,7 +235,7 @@ export class PrintService {
       },
       { text: '\n' }
     ];
-  
+
     // Parcourir chaque catégorie d'âge
     Object.entries(groupedParticipants).forEach(([ageCategory, disciplineGroups]) => {
       content.push({
@@ -236,7 +243,7 @@ export class PrintService {
         style: 'ageCategory',
         margin: [0, 15, 0, 10] as [number, number, number, number]
       });
-  
+
       // Parcourir chaque discipline dans cette tranche d'âge
       Object.entries(disciplineGroups).forEach(([disciplineName, participantList]) => {
         content.push({
@@ -244,7 +251,7 @@ export class PrintService {
           style: 'disciplineCategory',
           margin: [0, 10, 0, 5] as [number, number, number, number]
         });
-  
+
         content.push({
           table: {
             headerRows: 1,
@@ -277,32 +284,32 @@ export class PrintService {
         });
       });
     });
-  
+
     return content;
   }
-  
+
   // Impression format TaoLu séparé par genre
-  printTaoLuCompetition(participants: Participant[]) {
+  printTaoLuCompetition(participants: Participant[], ageCategories: AgeCategories) {
     const content: any[] = [
       { text: 'Competition TaoLu', style: 'header' },
       { text: `Généré le ${new Date().toLocaleDateString('fr-FR')}`, style: 'subheader' },
       { text: '\n' }
     ];
-  
+
     // Ajouter tout le contenu MASCULIN
-    const maleContent = this.createTaoLuContentByGender(participants, 'male');
+    const maleContent = this.createTaoLuContentByGender(participants, 'male', ageCategories);
     if (maleContent.length > 0) {
       // Première page pour les hommes (pas de pageBreak)
       maleContent[0].pageBreak = undefined;
       content.push(...maleContent);
     }
-  
+
     // Ajouter tout le contenu FÉMININ
-    const femaleContent = this.createTaoLuContentByGender(participants, 'female');
+    const femaleContent = this.createTaoLuContentByGender(participants, 'female', ageCategories);
     if (femaleContent.length > 0) {
       content.push(...femaleContent);
     }
-  
+
     const documentDefinition: any = {
       content,
       styles: {
@@ -343,7 +350,7 @@ export class PrintService {
         }
       }
     };
-  
+
     pdfMake.createPdf(documentDefinition).download('taolu-competition.pdf');
   }
 }

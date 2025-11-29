@@ -6,5 +6,8 @@ export interface Competition {
   type: 'sanda' | 'tao-lu',
   participants: Participant[],
   createdAt: number,
-  title: string
+  title: string,
+  ageCategories: AgeCategories
 }
+
+export type AgeCategories = {min: number, max: number}[]

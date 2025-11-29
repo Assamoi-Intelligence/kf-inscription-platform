@@ -82,7 +82,9 @@ export class ParticipantList {
     // } else {
     //   this.printService.printTaoLuCompetition(taoLuTestParticipants);
     // }
-    if (this.competition()?.type === 'sanda') this.printService.printSandaCompetition(this.participantsList());
-    if (this.competition()?.type === 'tao-lu') this.printService.printTaoLuCompetition(this.participantsList());
+    const {type, ageCategories } = this.competition()!;
+    const participants = this.participantsList();
+    if (type === 'sanda') this.printService.printSandaCompetition(participants, ageCategories);
+    if (type === 'tao-lu') this.printService.printTaoLuCompetition(participants, ageCategories);
   }
 }
